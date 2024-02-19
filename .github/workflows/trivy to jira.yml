@@ -28,7 +28,3 @@ jobs:
     - name: publish result to JIRA
       run: python ${{ github.workspace }}/scripts/trivy-ticketizer.py testresult.json ${{ secrets.JIRA }}
     
-
-
-
-    
