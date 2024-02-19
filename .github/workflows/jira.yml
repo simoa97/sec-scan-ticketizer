@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  checkout:
-    name: checkout the repository
-    runs-on: ubuntu latest
+  workflow:
+    name: example workflow - trivy
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
 
