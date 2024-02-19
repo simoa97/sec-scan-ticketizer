@@ -1,0 +1,34 @@
+
+name: Manual workflow
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+
+jobs:
+  checkout:
+    name: checkout the repository
+    runs-on: ubuntu latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install trivy
+      run: curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.49.1
+        
+    - name: install python
+      uses: actions/setup-python@v5
+
+    - name: pull image to be scanned
+      run: docker pull alpine
+
+    - name: scan the image
+      run: trivy image -f json -o testresult.json alpine:latest
+
+    - name: publish result to JIRA
+      run: python ${{ github.workspace }}/sec-scan-tickerizer/scripts/trivy-ticketizer testresult.json ${{ secrets.JIRA }}
+    
+
+
+
+    
