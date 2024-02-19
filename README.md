@@ -44,9 +44,19 @@ tbd
 #### GET
 All scripts use [Jira REST API GET method (Search for issues using JQL)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-get) to search for already created tickets in Jira to prevent creation of duplicates. This call searches for the names of the tickets that should be created. If the script finds such ticket in Jira, it will not be created again.
 
+Specify the organization url under the url variable in jira_search fucntion:
+```python
+url = "https://(your org name).atlassian.net/rest/api/3/search"
+```
+
 #### POST
 All scripts use [Jira REST API POST method (Create issue)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post) to create new tickets in Jira. This step is a little bit more complex than the previous GET method.
 In my example I used brand new Jira and brand new Project in Jira. The setup will differentiate and will depend on how you want to have your tickets for vulnerabilities set up. I use the default issue type “Task”.
+
+Specify the organization url under the url variable in jira_search fucntion:
+```python
+url = "https://(your org name).atlassian.net/rest/api/3/issue"
+```
 
 Every script has a function named jira_post_ticket. This function contains a variable named payload. This is the structure of the payload for the API call:
 
@@ -84,8 +94,8 @@ Other than the ticket name and the description, to successfully configure the pa
 - Navigating into Jira project under which the tickets should be posted to
 - Selecting the issuetype which will represent the ticket type of the vulnerabilities
   - To create new type see [Atlassian Documentation](https://support.atlassian.com/jira-cloud-administration/docs/add-edit-and-delete-an-issue-type/)
-  - If there is not ticket with such issue type, create one manually
 - Open the ticket with desired issue type
+  - If there is not ticket with such issue type, create one manually and open it
 - In the top right corner click on the three dots icon (⋯) and select Export XML
 - In the XML:
   - “type id” is issuetype id
@@ -98,16 +108,13 @@ After obtaining the relevant information, in this example issuetype id and proje
 tbd
 
 
-
 ## Contributing
 
-Contributions are always welcome! If you see any ways to improve, refactor or add new features go for it.
+Contributions are always welcome! If you see any ways to improve, refactor or add new features, go for it.
 
 See `contributing.md` **(tbd)** for ways to get started.
 
 
-
 ## License
-
-[MIT](LICENSE)
-
+Feel free to clone or download the scripts and use it, or use to code as inspiration for your own projects.
+This repository is licensed under [MIT](LICENSE) license.
