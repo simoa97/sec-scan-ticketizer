@@ -1,8 +1,5 @@
+name: Manual workflow - Trivy to Jira
 
-name: Manual workflow
-
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
 on:
   workflow_dispatch:
 
