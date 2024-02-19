@@ -26,7 +26,7 @@ jobs:
       run: trivy image -f json -o testresult.json alpine:latest
 
     - name: publish result to JIRA
-      run: python ${{ github.workspace }}/sec-scan-tickerizer/scripts/trivy-ticketizer testresult.json ${{ secrets.JIRA }}
+      run: python ${{ github.workspace }}/scripts/trivy-ticketizer.py testresult.json ${{ secrets.JIRA }}
     
 
 
