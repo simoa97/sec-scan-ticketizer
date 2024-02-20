@@ -5,26 +5,27 @@ on:
 
 jobs:
   workflow:
-    name: example workflow - owasp zap
+    name: example workflow - OWASP ZAP
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
 
-    - name: Pull owasp ZAP 
+    - name: Pull OWASP ZAP 
       run: docker pull ghcr.io/zaproxy/zaproxy:stable
         
     - name: Install python
       uses: actions/setup-python@v5
 
 # following parts of the workflow are just for example purpose. You can scan a url api definition that is published on the internet.
-    - name: Pull image to be scanned
-      run: docker pull alpine
+    - name: Build docker image to be scanned
+      run: docker build . -t flask-openapi
     
-    - name: Run docker image
-      run: to be done
+    - name: Run App docker image
+      run: docker run -p 5000:5000 flask-openapi
 
+# If running the image locally, you must specify --network host, allowing container access the host network
     - name: Scan the image
-      run: to be done
+      run: docker run --network host owasp/zap2docker-weekly zap-api-scan.py -t http://172.17.0.2:5000/api/docs/#/ -f openapi | tee flaskresult
 
     - name: Publish result to JIRA
-      run: python ${{ github.workspace }}/scripts/owasp-ticketizer.py testresult.json ${{ secrets.JIRA }} alpine # alpine can be exchanged for repository name variable - ${{ github.event.repository.name }}
+      run: python ${{ github.workspace }}/scripts/owasp-ticketizer.py testresult ${{ secrets.JIRA }} flask-app # alpine can be exchanged for repository name variable - ${{ github.event.repository.name }}
