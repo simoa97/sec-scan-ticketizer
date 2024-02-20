@@ -12,6 +12,9 @@ jobs:
 
     - name: Pull OWASP ZAP 
       run: docker pull ghcr.io/zaproxy/zaproxy:stable
+
+    - name: get name of image
+      run: docker images
         
     - name: Install python
       uses: actions/setup-python@v5
@@ -25,7 +28,7 @@ jobs:
 
 # If running the image locally, you must specify --network host, allowing container access the host network
     - name: Scan the image
-      run: docker run --network host zaproxy/zaproxy zap-api-scan.py -t http://172.17.0.2:5000/api/docs/#/ -f openapi | tee flaskresult
+      run: docker run --network host ghcr.io/zaproxy/zaproxy zap-api-scan.py -t http://172.17.0.2:5000/api/docs/#/ -f openapi | tee flaskresult
 
     - name: Publish result to JIRA
-      run: python ${{ github.workspace }}/scripts/owasp-ticketizer.py testresult ${{ secrets.JIRA }} flask-app # alpine can be exchanged for repository name variable - ${{ github.event.repository.name }}
+      run: python ${{ github.workspace }}/scripts/owasp-ticketizer.py flaskresult ${{ secrets.JIRA }} flask-app # alpine can be exchanged for repository name variable - ${{ github.event.repository.name }}
