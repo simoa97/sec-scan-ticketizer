@@ -18,14 +18,14 @@ jobs:
 
 # following parts of the workflow are just for example purpose. You can scan a url api definition that is published on the internet.
     - name: Build docker image to be scanned
-      run: docker build . -t flask-openapi
+      run: docker build ${{ github.workspace }}/app -t flask-openapi
     
     - name: Run App docker image
       run: docker run -p 5000:5000 flask-openapi
 
 # If running the image locally, you must specify --network host, allowing container access the host network
     - name: Scan the image
-      run: docker run --network host owasp/zap2docker-weekly zap-api-scan.py -t http://172.17.0.2:5000/api/docs/#/ -f openapi | tee flaskresult
+      run: docker run --network host zaproxy/zaproxy zap-api-scan.py -t http://172.17.0.2:5000/api/docs/#/ -f openapi | tee flaskresult
 
     - name: Publish result to JIRA
       run: python ${{ github.workspace }}/scripts/owasp-ticketizer.py testresult ${{ secrets.JIRA }} flask-app # alpine can be exchanged for repository name variable - ${{ github.event.repository.name }}
