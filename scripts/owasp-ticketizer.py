@@ -38,7 +38,11 @@ def jira_search(ticket_name, token):
     response_dict = json.loads(response.text)
 
     # return the total of the matched tickets
-    return response_dict['total']
+
+    try:
+        return response_dict['total']
+    except KeyError:
+        print(f'Cannot find {ticket_name}')
 
 
 def jira_post_ticket(ticket_title, ticket_description, token):
