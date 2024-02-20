@@ -39,10 +39,11 @@ def jira_search(ticket_name, token):
 
     # return the total of the matched tickets
 
+    # doesnt work with long queries - needs to be changed to POST method
     try:
         return response_dict['total']
     except KeyError:
-        print(f'Cannot find {ticket_name}')
+        return response_dict.get('total')
 
 
 def jira_post_ticket(ticket_title, ticket_description, token):
