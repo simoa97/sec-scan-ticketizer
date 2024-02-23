@@ -31,4 +31,4 @@ jobs:
       run: docker run --network host ghcr.io/zaproxy/zaproxy zap-api-scan.py -t http://172.17.0.2:5000/api/docs/#/ -f openapi | tee flaskresult
 
     - name: Publish result to JIRA
-      run: python ${{ github.workspace }}/scripts/owasp-ticketizer.py flaskresult ${{ secrets.JIRA }} flask-app # alpine can be exchanged for repository name variable - ${{ github.event.repository.name }}
+      run: python ${{ github.workspace }}/scripts/owasp-ticketizer.py flaskresult ${{ secrets.JIRA }} flask-app # flask-app can be exchanged for repository name variable - ${{ github.event.repository.name }}
