@@ -21,7 +21,7 @@ For basic auth, API token is needed to authenticate the account. API token can b
 
 The best practice would be to create a new “service account” a set up only the permissions that are needed for this workflow:
 POST (create ticket) - Browse projects and Create issues [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project in which the issue or subtask is created.
-GET (search for tickets) - Browse projects [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue. If issue-level security is configured, [issue-level security](https://confluence.atlassian.com/x/J4lKLg) permission to view the issue.
+POST (search for tickets) - Browse projects [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue. If issue-level security is configured, [issue-level security](https://confluence.atlassian.com/x/J4lKLg) permission to view the issue.
 
 #### OAuth 2.0
 tbd
@@ -50,7 +50,7 @@ url = "https://(your org name).atlassian.net/rest/api/3/search"
 ```
 
 #### POST (create ticket)
-All scripts use [Jira REST API POST method (Create issue)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post) to create new tickets in Jira. This step is a little bit more complex than the previous GET method.
+All scripts use [Jira REST API POST method (Create issue)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post) to create new tickets in Jira. This step is a little bit more complex than the previous POST method.
 In my example I used brand new Jira and brand new Project in Jira. The setup will differentiate and will depend on how you want to have your tickets for vulnerabilities set up. I use the default issue type “Task”.
 
 Specify the organization url under the url variable in jira_search fucntion:
