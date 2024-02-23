@@ -41,15 +41,15 @@ tbd
 
 ### Setting up the API calls structure
 
-#### GET
-All scripts use [Jira REST API GET method (Search for issues using JQL)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-get) to search for already created tickets in Jira to prevent creation of duplicates. This call searches for the names of the tickets that should be created. If the script finds such ticket in Jira, it will not be created again.
+#### POST (search for existing tickets)
+All scripts use [Jira REST API POST method (Search for issues using JQL)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-post) to search for already created tickets in Jira to prevent creation of duplicates. This call searches for the names of the tickets that should be created. If the script finds such ticket in Jira, it will not be created again.
 
 Specify the organization url under the url variable in jira_search fucntion:
 ```python
 url = "https://(your org name).atlassian.net/rest/api/3/search"
 ```
 
-#### POST
+#### POST (create ticket)
 All scripts use [Jira REST API POST method (Create issue)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post) to create new tickets in Jira. This step is a little bit more complex than the previous GET method.
 In my example I used brand new Jira and brand new Project in Jira. The setup will differentiate and will depend on how you want to have your tickets for vulnerabilities set up. I use the default issue type “Task”.
 
@@ -88,7 +88,7 @@ Every script has a function named jira_post_ticket. This function contains a var
 }
 ```
 
-This is the basic structure of the payload sufficient for creating a ticket with a title and description. Based on your needs, you can add more fields, modify the script and add other data to the ticket such as severity, custom fields, etc. To see a more complex structure, visit [Jira REST API POST method (Create issue)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post), where on the right you can see snippets for various languages.
+This is the basic structure of the payload sufficient for creating a ticket with a title and description. Based on your needs, you can add more fields, modify the script and add other data to the ticket such as severity, custom fields, etc. To see a more complex structure, visit [Jira REST API POST method (Create issue)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post), where on the right you can see code snippets for various programming languages.
 
 Other than the ticket name and the description, to successfully configure the payload we need to obtain “issuetype” id and and “project” id. This can be done by: 
 - Navigating into Jira project under which the tickets should be posted to
