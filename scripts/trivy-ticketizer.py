@@ -6,9 +6,6 @@ import argparse
 from requests.auth import HTTPBasicAuth
 
 
-# This call only takes a limited amount of characters for the jql query
-# Could a problem with long ticket names, if problem occurs use the POST method
-# https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-post
 def jira_search(ticket_name, token):
     """API call for searching issues in JIRA by name"""
     url = "https://adamsimo.atlassian.net/rest/api/3/search"
@@ -20,25 +17,35 @@ def jira_search(ticket_name, token):
     auth = HTTPBasicAuth(usr, tok)
 
     headers = {
-        "Accept": "application/json"
+        "Accept": "application/json",
+        "Content-Type": "application/json"
     }
 
-    query = {
-        'jql': f'summary ~ "{ticket_name}"'
-    }
+    payload = json.dumps({
+        "expand": [
+            "names"
+        ],
+        "fields": [
+            "summary"
+        ],
+        "fieldsByKeys": "false",
+        "jql": f'summary ~ "{ticket_name}"',
+        "maxResults": 15,
+        "startAt": 0
+    })
 
     response = requests.request(
-        "GET",
+        "POST",
         url,
+        data=payload,
         headers=headers,
-        params=query,
         auth=auth
     )
     # save response as a dictionary
     response_dict = json.loads(response.text)
 
     # return the total of the matched tickets
-    return response_dict['total']
+    return response_dict.get('total')
 
 
 def jira_post_ticket(ticket_title, ticket_description, token):
@@ -137,17 +144,17 @@ for result in only_results['Results']:  # for every key in the Results dictionar
         wrapped_results_list = [[vulnerability] for vulnerability in results_list]  # wrap each dictionary into a separate list
 
         for x in wrapped_results_list:  # list of (list of details of) per vulnerability
-            for list in x:  # for each list of details for vulnerability
-                cve_severity = list['Severity']
-                vuln_issue_title = f"""({cve_severity}) {list['VulnerabilityID']}: {scan_artifact_name}"""
-                vuln_issue_description = f"""Vulnerability ID:  {list['VulnerabilityID']}, {list['PrimaryURL']}
+            for vuln in x:  # for each list of details for vulnerability
+                cve_severity = vuln['Severity']
+                vuln_issue_title = f"""({cve_severity}) {vuln['VulnerabilityID']}: {scan_artifact_name}"""
+                vuln_issue_description = f"""Vulnerability ID:  {vuln['VulnerabilityID']}, {vuln['PrimaryURL']}
 Target: {scan_target}, class: {scan_target_class}
-Package ID: {list["PkgName"]} version: {list['InstalledVersion']}
-Status : {list["Status"]}, fixed version: {list["FixedVersion"]}
+Package ID: {vuln["PkgName"]} version: {vuln['InstalledVersion']}
+Status : {vuln["Status"]}, fixed version: {vuln["FixedVersion"]}
 
-Title: {list['Title']}
-Description: {list['Description']}
-Severity: {list['Severity']}"""
+Title: {vuln['Title']}
+Description: {vuln['Description']}
+Severity: {vuln['Severity']}"""
             if jira_search(vuln_issue_title, t) != 0:
                 print(f'{vuln_issue_title} already exists in JIRA.')
             else:
