@@ -107,9 +107,11 @@ After obtaining the relevant information, in this example issuetype id and proje
 ### Implementation into the pipeline (GitHub Actions)
 
 For trivy see, simple trivy to jira [GitHub Action workflow](.github/workflows/trivy-to-jira.yml)
+
 ![trivy workflow](https://github.com/simoa97/sec-scan-ticketizer/actions/workflows/trivy-to-jira.yml/badge.svg)
 
 For OWASP ZAP see, simple OWASP ZAP to jira [GitHub Action workflow](.github/workflows/owasp-zap-to-jira.yml)
+
 ![OWASP ZAP workflow](https://github.com/simoa97/sec-scan-ticketizer/actions/workflows/owasp-zap-to-jira.yml/badge.svg)
 
 ## Contributing
