@@ -6,9 +6,6 @@ import argparse
 from requests.auth import HTTPBasicAuth
 
 
-# This call only takes a limited amount of characters for the jql query
-# Could a problem with long ticket names, if problem occurs use the POST method
-# https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-post
 def jira_search(ticket_name, token):
     """API call for searching issues in JIRA by name"""
     url = "https://adamsimo.atlassian.net/rest/api/3/search"
@@ -20,18 +17,28 @@ def jira_search(ticket_name, token):
     auth = HTTPBasicAuth(usr, tok)
 
     headers = {
-        "Accept": "application/json"
+        "Accept": "application/json",
+        "Content-Type": "application/json"
     }
 
-    query = {
-        'jql': f'summary ~ "{ticket_name}"'
-    }
+    payload = json.dumps({
+        "expand": [
+            "names"
+        ],
+        "fields": [
+            "summary"
+        ],
+        "fieldsByKeys": "false",
+        "jql": f'summary ~ "{ticket_name}"',
+        "maxResults": 15,
+        "startAt": 0
+    })
 
     response = requests.request(
-        "GET",
+        "POST",
         url,
+        data=payload,
         headers=headers,
-        params=query,
         auth=auth
     )
     # save response as a dictionary
@@ -40,10 +47,10 @@ def jira_search(ticket_name, token):
     # return the total of the matched tickets
 
     # doesnt work with long queries - needs to be changed to POST method
-    try:
-        return response_dict['total']
-    except KeyError:
-        return response_dict.get('total')
+    # try:
+    # return response_dict['total']
+    # except KeyError:
+    return response_dict.get('total')
 
 
 def jira_post_ticket(ticket_title, ticket_description, token):
@@ -136,13 +143,13 @@ for i, l in enumerate(data):
         addr_count = int(addr_match.group(1)) if addr_match else None  # save the count of vulnerable addresses
         owasp_ref = f' https://www.zaproxy.org/docs/alerts/{str(vuln_number)}'  # create a owasp db reference
         if addr_count is not None:  # save the next lines containing vulnerable
-            # addresses 
+            # addresses
             addr_lines = data[i+1:i+(addr_count + 1)]
         else:
             continue
         addr_list = ''.join(addr_lines)
         issue_description = f"""Vulnerability name: OWASP - {warn_name}
-OWASP Reference docs: {owasp_ref.lstrip()} 
+OWASP Reference docs: {owasp_ref.lstrip()}
 Vulnerable addresses:
 {addr_list}"""
         finding_check = True
