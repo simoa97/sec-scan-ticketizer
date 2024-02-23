@@ -104,11 +104,13 @@ The XML export can be used to find other relevant fields you would like to inclu
  
 After obtaining the relevant information, in this example issuetype id and project id, change these values in your scripts.
 
-### Implementation in the pipeline (GitHub Actions)
+### Implementation into the pipeline (GitHub Actions)
 
-For trivy see Simple trivy to jira [GitHub Action workflow](.github/workflows/trivy-to-jira.yml)
+For trivy see, simple trivy to jira [GitHub Action workflow](.github/workflows/trivy-to-jira.yml)
+![trivy workflow](https://github.com/simoa97/sec-scan-ticketizer/actions/workflows/trivy-to-jira.yml/badge.svg)
 
-For OWASP ZAP see Simple OWASP ZAP to jira [GitHub Action workflow](.github/workflows/owasp-zap-to-jira.yml)
+For OWASP ZAP see, simple OWASP ZAP to jira [GitHub Action workflow](.github/workflows/owasp-zap-to-jira.yml)
+![OWASP ZAP workflow](https://github.com/simoa97/sec-scan-ticketizer/actions/workflows/owasp-zap-to-jira.yml/badge.svg)
 
 ## Contributing
 
